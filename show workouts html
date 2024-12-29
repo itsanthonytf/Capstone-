@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5 pt-3">
+        <div class="team-single-text padding-50px-left sm-no-padding-left">
+     
+            <div class="row">
+                <div class="d-flex justify-content-center align-items-center col-md-12 col-12 mt-2">
+                    <div class="flex-grow-1">
+                        <i class="teams-fa-color fas fa-dumbbell mt-2 fa-3x"></i>
+                        <h1 class="d-inline teams-fa-color display-5 px-1">Workouts</h1>
+                        <div class="d-inline ">
+                            <a class="btn btn-primary btn-customized btn mb-3 " href="/workouts/add">ADD</a>
+                            <a class="btn btn-primary btn-customized btn mb-3 " href="{{ url_for('.athlete_workouts_show') }} ">VIEW ATHLETE WORKOUTS</a>    
+                        </div>   
+                    </div>
+                </div>  
+            </div> 
+        </div>
+
+        <div class="container">
+            <div class="container m-0 p-0">
+                <div class="row align-items-md-stretch">  
+                    <div id="add-athlete" class="col-md-12">
+                        <div class="h-100 p-1 text-dark rounded-3">
+                            <h1 class="fs-2 text-center page-sub-title">Select a Workout</h1>
+                            <form class="form" method="POST">
+                                {{ form.hidden_tag() }}
+                                
+                                {% for field in form if field.widget.input_type != 'hidden'%}
+                                <div class="fs-5 p-2 col-12 col-sm-8 col-md-6 col-lg-4">   
+                                    <button class="btn btn-primary btn-customized btn " type="submit">SELECT</button>
+                                    <p class="d-inline align-items-center"> from available {{field.label}}</p>
+                                        {{field}}  
+                                    {% for err in field.errors %}
+                                    <small class="text-danger">
+                                        {{err}}
+                                    </small>
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                            </form>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>    
+        {% for workout in workouts %}
+        <div class="card bg-light m-2">
+            <div class="row p-2">       
+                <div class="col-sm-12  p-2">
+                    <a class="card-title card-link text-decoration-none" href="/workouts/{{ workout.id }}">
+                        <h5 class="card-link tes2 fs-4 ps-3 pt-3 d-inline">{{workout.name}}</h5>
+                    </a>
+                </div>
+                <div class="col-sm-2  ms-3">
+                    <a class="btn  btn-customized  col-sm-1 my-0 mb-4 d-inline" href="/workouts/edit/{{workout.id}}">EDIT</a> 
+
+                    <form  class="d-inline col-sm-1" action="/workouts/delete/{{ workout.id }}" method="POST">                            
+                        <a class="tooltips  " data-toggle="tooltip" data-placement="top" title="Delete">
+                            <button class="page-links-dark" type="submit" onclick="return confirm('Are you sure to delete this workout ?');" style="border: 0; background: none;">
+                            <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                            </button>
+                        </a> 
+                    </form>
+                </div>       
+            </div>
+
+            <div class="col-sm-12  p-2 mb-3">
+                <p class="text-small text-dark tes2 fs-5 ps-3 mb-0 pb-0"> Description: &ldquo;{{ workout.description}}&rdquo;</p>
+            </div> 
+            <div class="card-body text-dark"> 
+                <div class="container">
+            
+                    <div class="row d-flex align-content-around flex-wrap">
+                        {% for exercise in workout.workout_exercises %}
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            
+                            <div class="card workout-exercise m-1 ">
+                                <div class="card-body"> 
+                                    <div class="card-contents">
+                                        <p class="text-dark tes2">{{exercise.exercise.name.upper()}}</p>
+                                    </div>
+                                    <div class="image-wrapper">
+                                        <a href="/exercises/exercise/{{ exercise.exercise.id }}" class="card-link">
+                                            <img src="{{ exercise.exercise.image_url }}" alt="Image for workout" 
+                                            class="card-img-bottom rounded rounded-3 exercise-workout-image">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% endfor %}     
+                    </div>       
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+</div>
+
+{% endblock %}
