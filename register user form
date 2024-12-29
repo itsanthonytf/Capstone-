@@ -1,0 +1,42 @@
+{% extends 'home.html' %}
+
+
+{% block content1 %} 
+
+        <div class="container m-0 py-4">
+            <div class="row align-items-md-stretch">
+                <div id="register" class="col-md-12">
+                    <div class="h-100 p-5 text-white bg-register rounded-3">
+                        <h1 class="display-4 text-center fs-4">Register</h1>
+                        <p class="text-center">No spam. Totally free. Only username, password and email required.</p>
+                        <form class="form" method="POST">
+                            {{ form.hidden_tag() }}
+                            <div class="row d-row align-self-center justify-content-center">
+                                <div>
+                                    <button class="btn btn-primary btn-customized btn my-2 " type="submit">REGISTER</button>
+                                    <a class="btn btn-primary btn-customized btn my-2 " href="/">CANCEL</a>
+                                </div>  
+                                {% for field in form if field.widget.input_type != 'hidden'%}
+                              
+                                <div class="fs-5 p-2 col-12 col-sm-12">
+                                    {{field.label}}
+                                    {{field}}
+                                    {% for err in field.errors %}
+                                    <small class="text-danger">
+                                        {{err}}
+                                    </small>
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                                <div class="">
+                                    <button class="btn btn-primary btn-customized btn my-2 " type="submit">REGISTER</button>
+                                    <a class="btn btn-primary btn-customized btn my-2 " href="/">CANCEL</a>
+                                </div>  
+                            </div>         
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
