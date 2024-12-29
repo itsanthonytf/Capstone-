@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <h4 class="tes1 text-center mt-5 pt-3">ATHLETE PROFILE</h4>
+    
+    <div  id="login-link" class="container-fluid header-img p-0 m-0" style="background: url(' {{ athlete.team.team_image_url }}') no-repeat top center fixed;"></div>
+    
+    <div class="container mt-3">
+        <div class="team-single ">
+            <div class="row ">
+                <div class="col-lg-4 col-md-5 xs-margin-30px-bottom">
+                    <div class="text-center mb-2">
+                        <img class="profile-img img-fluid rounded-circle shadow" src="{{athlete.athlete_image_url}}" alt="" data-holder-rendered="true">
+                    </div>
+                    <div class="profile-text bg-light-gray padding-30px-all md-padding-25px-all sm-padding-20px-all text-center">
+                        <h4 class="margin-10px-bottom font-size24 md-font-size22 sm-font-size20 font-weight-600 pt-2">position - {{athlete.position}}</h4>
+                        <p class="tes2">Name: {{athlete.full_name }}</p>
+                        <p class="tes2">Height: {{athlete.height }}</p>
+                        <p class="tes2">Weight: {{athlete.weight }}</p>
+                        <p class="tes2">Joined: {{athlete.friendly_date }}</p>
+                        <p class="tes2">Email: {{athlete.email }}</p>
+                        <p class="tes2">Medical Status: <span class="card-text tes2 text-success">{{ athlete.medical_status }}</span></p>
+                        <a class="btn btn-primary btn-customized btn mt-2 mb-3" href="{{ url_for('.athlete_workouts_assign' ) }}">ASSIGN WORKOUT</a>
+                    </div>
+                </div>
+           
+            
+                
+                <div class="col-lg-8 col-md-7">
+                    <h1 class="text-dark tes2-lg">{{ athlete.full_name }}</h1>
+                    <div class="d-flex d-inline">
+                        <a class="btn btn-primary btn-customized btn mb-3 me-1 d-inline" href="/athletes/edit/{{ athlete.id }}">EDIT</a>  
+                        <button class="btn btn-primary btn-customized btn mb-3" onclick="goBack()">Go Back</button>
+                        <form action="{{ url_for('.athlete_delete', athlete_id=athlete.id ) }}" method="POST">
+                            <a class="tooltips page-links-dark d-inline " data-toggle="tooltip" data-placement="top" title="Delete">
+                                <button class="page-links-dark " type="submit" onclick="return confirm('Are you sure to delete this athlete?');" style="border: 0; background: none;">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </a> 
+                        </form>
+                       
+                    </div>
+
+                
+                    {% block athlete_workout_content %} {% endblock %}
+                
+
+                
+                    <div class="row ">
+                        <div class="container d-flex flex-wrap p-2">
+                            {% for workout in workouts %}
+                                {% if workout.id == athlete.id %}
+                                   
+                                    <a class="card-link text-dark text-decoration-none " href="{{ url_for('.workout_show', workout_id=workout['workout_id'] ) }}">
+                                    
+                                            <div class="card col-lg-5 m-1 workout-athlete-card rounded ">
+                                                <div class="card-body "> 
+                                                    <p class="tes2-lg mt-2 ">{{ workout.name }}</p> 
+                                                    <p class="tes2-md mt-2 ">{{ workout.description}}</p> 
+                                                    <div class="d-flex d-flex-row justify-content-center align-items-center pb-2">
+                                                        <p class="d-inline tes2 pe-1">Actions:</p>
+                                                        <a class="  me-1 d-flex-inline align-items-center page-links-dark" 
+                                                            href="{{ url_for('.workout_edit', workout_id=workout['workout_id'] ) }}"><i class="bi bi-pen"></i>
+                                                        </a>
+                                                        <form action="{{ url_for('.athlete_workouts_completed',workout_id=workout['workout_id'], athlete_id=athlete.id) }}" method="POST">
+                                                            <a class="tooltips page-links-dark" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                                <button class="page-links-dark " type="submit" onclick="return confirm('CONFIRM workout is completed.');" style="border: 0; background: none;">
+                                                                    <i class=" text-success bi bi-check-circle"></i>
+                                                                </button>
+                                                            </a> 
+                                                        </form>
+                                                        
+                                                   
+                                                        <form action="{{ url_for('.athlete_workout_delete', workout_id=workout['workout_id'], athlete_id=athlete.id ) }}" method="POST">
+                                                            <a class="tooltips page-links-dark" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                                <button class="page-links-dark " type="submit" onclick="return confirm('Are you sure to delete this workout ?');" style="border: 0; background: none;">
+                                                                    <i class="text-danger bi bi-trash"></i>
+                                                                </button>
+                                                            </a> 
+                                                        </form>
+                                                        <p class="card-text tes2 mt-2">Medical Status: <span class="card-text tes2 text-success">{{ workout.medical_status }}</span></p>  
+                                                    </div>              
+                                                </div>
+                                            </div>
+                                    
+                                    </a>  
+                                {% endif %}  
+                            {% endfor %}  
+                        </div>   
+                    </div>   
+                </div>
+            </div> 
+        </div>
+    </div>                     
+
+
+
+{% endblock %}
